@@ -1,6 +1,6 @@
 import { createStore, Commit } from "vuex";
-import { testColumns } from "../data/columnlist";
-import { testPosts } from "../data/PostProps";
+// import { testColumns } from "../data/columnlist";
+// import { testPosts } from "../data/PostProps";
 import { localType, storageHandler } from "../libs/storeage";
 import { axios, AxiosRequestConfig } from "../libs/http";
 import { arrToObj, objToArr } from "../libs/helper";
@@ -56,9 +56,23 @@ const store = createStore<GlobalDataProps>({
     setError(state, e: GlobalErrorProps) {
       state.error = e;
     },
-    login(state) {
+    login(state, rawData) {
+      const { token } = rawData.data;
+      state.token = token;
+      storageHandler.setItem(localType, "token", token);
       state.user = { ...state.user, isLogin: true, nickname: "viking" };
+      // axios.defaults.headers.common.Authorization = `Bearer ${token}`
     },
+    fetchCurrentUser(state,rawData) {
+      // console.log(rawData.data);
+      state.user = { isLogin: true, ...rawData.data }
+    },
+    logout(state) {
+      state.token = "";
+      state.user = { isLogin: false};
+      storageHandler.remove(localType, "token");
+      delete axios.defaults.headers.common.Authorization;
+    }
   },
   actions: {
     fetchColumns({ state, commit }, params = {}) {
@@ -76,6 +90,20 @@ const store = createStore<GlobalDataProps>({
       if (!state.columns.data[cid]) {
         return asyncAndCommit(`/api/columns/${cid}`, "fetchColumn", commit);
       }
+    },
+    loginAndFetch({dispatch}, loginData) {
+      return dispatch("login", loginData).then(() => {
+        return dispatch("fetchCurrentUser");
+      })
+    },
+    login({commit}, payload) {
+      return asyncAndCommit("/api/user/login","login", commit, { method: "post", data: payload});
+    },
+    fetchCurrentUser({commit}) {
+      return asyncAndCommit("/api/user/currentUser","fetchCurrentUser", commit);
+    },
+    register({commit}, payload) {
+      return asyncAndCommit("/api/users/", "register", commit, { method: "post", data: payload });
     },
   },
   getters: {

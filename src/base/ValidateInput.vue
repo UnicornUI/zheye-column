@@ -8,6 +8,7 @@
       :value="inputRef.val"
       @blur="validateInput"
       @keyup="updateValue"
+      v-bind="$attrs"
     />
     <span v-if="inputRef.error" class="invalid-feedback">{{
       inputRef.message

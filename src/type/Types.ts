@@ -11,6 +11,8 @@ export interface ColumnProps {
   description: string;
 }
 
+export type MessageType = "success" | "error" | "default";
+
 export interface UserProps {
   isLogin: boolean;
   nickname?: string;
@@ -22,7 +24,8 @@ export interface UserProps {
 }
 
 export interface RuleProps {
-  type: "required" | "email";
+  type: "required" | "email" | "custom";
+  validator ?: () => boolean;
   message: string;
 }
 
