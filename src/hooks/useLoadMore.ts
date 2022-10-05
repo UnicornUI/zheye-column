@@ -2,7 +2,7 @@ import { ref, computed, ComputedRef } from "vue";
 import { useStore } from "vuex";
 
 export interface LoadParams {
-  columnId?: number;
+  columnId?: string;
   currentPage: number;
   pageSize: number;
 }

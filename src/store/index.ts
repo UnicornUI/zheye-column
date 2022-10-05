@@ -50,6 +50,16 @@ const store = createStore<GlobalDataProps>({
     fetchColumn(state, rawData) {
       state.columns.data[rawData.data._id] = rawData.data;
     },
+    fetchPosts(state, { data: rawData, extraData: columnId}) {
+      const { data } = state.posts;
+      const { list, count, currentPage } = rawData.data;
+      state.posts.data = { ...data, ...arrToObj(list)};
+      state.posts.loadedColumns[columnId] = {
+        columnId: columnId,
+        total: count,
+        currentPage: currentPage * 1,
+      };
+    },
     setLoading(state, status) {
       state.loading = status;
     },
@@ -91,6 +101,30 @@ const store = createStore<GlobalDataProps>({
         return asyncAndCommit(`/api/columns/${cid}`, "fetchColumn", commit);
       }
     },
+    fetchPosts({state, commit}, params = {}) {
+      const { columnId, currentPage=1, pageSize = 3} = params;
+      const loadedPost = state.posts.loadedColumns[columnId];
+      if (!loadedPost) {
+        return asyncAndCommit(
+          `/api/columns/${columnId}/posts?currentPage=${currentPage}&pageSize=${pageSize}`,
+          "fetchPosts",
+          commit,
+          { method: "get"},
+          columnId
+        );
+      }else {
+        const loadedPostCurrentPage = loadedPost.currentPage || 0
+        if (loadedPostCurrentPage < currentPage) {
+          return asyncAndCommit(
+            `/api/columns/${columnId}/posts?currentPage=${currentPage}&pageSize=${pageSize}`,
+            "fetchPosts",
+            commit,
+            { method: "get" },
+            columnId,
+          )
+        }
+      }
+    },
     loginAndFetch({dispatch}, loginData) {
       return dispatch("login", loginData).then(() => {
         return dispatch("fetchCurrentUser");
@@ -112,6 +146,15 @@ const store = createStore<GlobalDataProps>({
     },
     getColumnById: (state) => (id: string) => {
       return state.columns.data[id];
+    },
+    getLoadedPost: (state) => (id: string) => {
+      return state.posts.loadedColumns[id];
+    },
+    getCurrentPost: (state) => (id: string) => {
+      return state.posts.data[id];
+    },
+    getPostByCid: (state) => (cid: string) => {
+      return objToArr(state.posts.data).filter(post => post.column === cid);
     },
   },
 });
