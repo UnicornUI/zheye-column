@@ -1,14 +1,13 @@
 <template>
   <teleport to="#message">
     <div v-if="isVisible"
-      class="alert message-info fixed-top w-50 mx-auto d-flex justify-content-between mz-2"
+      class="alert message-info fixed-top w-50 mx-auto d-flex justify-content-between mt-2"
       :class="classObject"
-      >
     >
+      <span>{{ message }}</span>
+      <button type="button" class="close btn-close" aria-label="Close" @click.prevent="hide">
+      </button>
     </div>
-    <span>{{message}}</span>
-    <button type="button" class="close btn-close" aria-label="Close" @click.prevent="hide">
-    </button>
   </teleport>
 </template>
 
