@@ -38,7 +38,15 @@ let funcArr: ValidateFunc[] = [];
 
 const submitForm = () => {
   // 循环执行数组，得到最终的验证结果
-  const result = funcArr.map((func) => func()).every((result) => result);
+  const result = funcArr
+  .map((func) => {
+    console.log(func);
+    func()
+  })
+  .every((result) => {
+    console.log(result);
+    return result;
+  });
   emits("form-submit", result);
 };
 
