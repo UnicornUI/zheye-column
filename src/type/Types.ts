@@ -15,7 +15,7 @@ export type MessageType = "success" | "error" | "default";
 
 export interface UserProps {
   isLogin: boolean;
-  nickname?: string;
+  nickName?: string;
   _id?: number;
   column?: string;
   email?: string;

@@ -70,8 +70,8 @@ const store = createStore<GlobalDataProps>({
       const { token } = rawData.data;
       state.token = token;
       storageHandler.setItem(localType, "token", token);
-      state.user = { ...state.user, isLogin: true, nickname: "viking" };
-      // axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      state.user = { ...state.user, isLogin: true };
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     },
     fetchCurrentUser(state,rawData) {
       // console.log(rawData.data);
@@ -125,16 +125,15 @@ const store = createStore<GlobalDataProps>({
         }
       }
     },
-    loginAndFetch({dispatch}, loginData) {
-      return dispatch("login", loginData).then(() => {
-        return dispatch("fetchCurrentUser");
-      })
+    async loginAndFetch({dispatch}, loginData) {
+      await dispatch("login", loginData);
+      return await dispatch("fetchCurrentUser");
     },
     login({commit}, payload) {
       return asyncAndCommit("/api/user/login","login", commit, { method: "post", data: payload});
     },
     fetchCurrentUser({commit}) {
-      return asyncAndCommit("/api/user/currentUser","fetchCurrentUser", commit);
+      return asyncAndCommit("/api/user/current","fetchCurrentUser", commit);
     },
     register({commit}, payload) {
       return asyncAndCommit("/api/users/", "register", commit, { method: "post", data: payload });
