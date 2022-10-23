@@ -25,11 +25,13 @@ runsideEffectOnce()
 */
 export const emitter: Emitter<any> = mitt();
 </script>
+
+
 <script setup lang="ts">
 // code...
 import { onUnmounted } from "vue";
 import mitt, { Emitter } from "mitt";
-type ValidateFunc = () => Boolean;
+type ValidateFunc = () => boolean;
 
 // 实例化 mitt
 const emits = defineEmits(["form-submit"]);
@@ -38,7 +40,13 @@ let funcArr: ValidateFunc[] = [];
 
 const submitForm = () => {
   // 循环执行数组，得到最终的验证结果
-  const result = funcArr.map((func) => func()).every((result) => result);
+  const result = funcArr
+  .map((func) => {
+    return func();
+  })
+  .every((result) => {
+    return result;
+  });
   emits("form-submit", result);
 };
 

@@ -2,12 +2,19 @@
   <!-- code... -->
   <div class="validate-input-container pb-3">
     <input
-      type="text"
+      v-if="tag !== 'textarea'"
       class="form-control"
       :class="{ 'is-invalid': inputRef.error }"
-      :value="inputRef.val"
+      v-model="inputRef.val"
       @blur="validateInput"
-      @keyup="updateValue"
+      v-bind="$attrs"
+    />
+    <textarea
+      v-else
+      class="form-control"
+      :class="{'is-invalid': inputRef.error}"
+      @blur="validateInput"
+      v-model="inputRef.val"
       v-bind="$attrs"
     />
     <span v-if="inputRef.error" class="invalid-feedback">{{
@@ -17,21 +24,33 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, PropType, onMounted } from "vue";
+
+import { reactive, PropType, onMounted, computed } from "vue";
 import { RuleProps } from "../type/Types";
 import { emitter } from "./ValidateForm.vue";
+
+export type TagType = "input" | "textarea" | "custom";
 const emailReg =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const props = defineProps({
   rules: Array as PropType<RuleProps[]>,
   modelValue: String,
+  tag:{
+    type: String as PropType<TagType>,
+    default: 'input'
+  }
 });
 
 const emits = defineEmits(["update:modelValue"]);
 
 const inputRef = reactive({
-  val: props.modelValue || "",
+  val: computed({
+    get: () => props.modelValue || "",
+    set: val => {
+      emits('update:modelValue', val)
+    }
+  }),
   error: false,
   message: "",
 });
@@ -54,18 +73,24 @@ const validateInput = () => {
         case "email":
           passed = emailReg.test(inputRef.val);
           break;
+        case "custom":
+          passed = rule.validator ? rule.validator() : true;
+          break;
         default:
           break;
       }
       return passed;
     });
     inputRef.error = !allPassed;
+    return allPassed;
   }
+  return true;
 };
 
 onMounted(() => {
   emitter.emit("form-item-created", validateInput);
 });
+
 </script>
 <style scoped>
 /* code... */

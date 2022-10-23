@@ -111,5 +111,11 @@ const onFormSubmit = (result: boolean) => {
 </script>
 
 <style scoped>
-
+.w-330 {
+  max-width: 330px;
+}
+.btn-block {
+  width: 100%;
+  display: block;
+}
 </style>

@@ -42,7 +42,7 @@ const passwordRules: RuleProps[] = [
 const router = useRouter();
 const store = useStore<GlobalDataProps>();
 
-const onFormSubmit = (result: boolean) => { 
+const onFormSubmit = (result: boolean) => {
   if (result)  {
     const payload = {
       email: emailVal.value,
@@ -63,4 +63,11 @@ const onFormSubmit = (result: boolean) => {
 
 <style scoped>
 /* code... */
+.w-330 {
+  max-width: 330px;
+}
+.btn-block {
+  width: 100%;
+  display: block;
+}
 </style>
