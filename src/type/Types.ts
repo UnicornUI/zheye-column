@@ -16,7 +16,7 @@ export type MessageType = "success" | "error" | "default";
 export interface UserProps {
   isLogin: boolean;
   nickName?: string;
-  _id?: number;
+  _id?: string;
   column?: string;
   email?: string;
   description?: string;
@@ -25,8 +25,14 @@ export interface UserProps {
 
 export interface RuleProps {
   type: "required" | "email" | "custom";
-  validator ?: () => boolean;
+  validator?: () => boolean;
   message: string;
+}
+
+export interface ResponseType<P = {}> {
+  code: number;
+  msg: string;
+  data: P;
 }
 
 export interface PostProps {

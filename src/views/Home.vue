@@ -1,6 +1,6 @@
 <template>
   <div class="home-page container-md">
-    <section class="py-5 text-center container">
+    <section class="text-center container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
           <img src="../assets/callout.svg" alt="callout" class="w-50" />
