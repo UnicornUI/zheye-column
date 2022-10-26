@@ -4,8 +4,8 @@ import Login from "./views/Login.vue";
 import Signup from "./views/Signup.vue";
 import CreatePost from "./views/CreatePost.vue";
 import ColumnDetail from "./views/ColumnDetail.vue";
-import PostDetail from "../views/PostDetail.vue";
-import NotFound from "../view/NotFound.vue";
+import PostDetail from "./views/PostDetail.vue";
+import NotFound from "./views/NotFound.vue";
 import store from "./store";
 import { axios } from "./libs/http";
 
