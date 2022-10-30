@@ -6,6 +6,7 @@ import CreatePost from "./views/CreatePost.vue";
 import ColumnDetail from "./views/ColumnDetail.vue";
 import PostDetail from "./views/PostDetail.vue";
 import NotFound from "./views/NotFound.vue";
+import EditUserInfo from "./views/EditUserInfo.vue";
 import store from "./store";
 import { axios } from "./libs/http";
 
@@ -45,6 +46,11 @@ const router = createRouter({
       path: "/posts/:id",
       name: "post",
       component: PostDetail,
+    },
+    {
+      path: "/edit/:id",
+      name: "edit",
+      component: EditUserInfo
     },
     {
       path: "/*",
