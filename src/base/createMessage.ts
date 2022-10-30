@@ -14,7 +14,7 @@ const createMessage = (message: string, type: MessageType, timeout = 2000 ) => {
 
   // 2 秒后卸载节点
   setTimeout(() => {
-    messageInstance.unmount(mountNode);
+    messageInstance.unmount();
     document.body.removeChild(mountNode);
   }, timeout);
 };

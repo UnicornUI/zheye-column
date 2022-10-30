@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import store from "../store";
 
-axios.defaults.baseURL = "http://127.0.0.1:7001/";
+axios.defaults.baseURL = "http://127.0.0.1:3001/";
 // axios.defaults.baseURL = "http://api.imooc.com/";
 // axios.defaults.baseURL = "http://api.vikingship.xyz:7001/";
 
