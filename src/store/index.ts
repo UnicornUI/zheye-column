@@ -89,6 +89,9 @@ const store = createStore<GlobalDataProps>({
       // console.log(rawData.data);
       state.user = { isLogin: true, ...rawData.data };
     },
+    updateUser(state, rawData) {
+      state.user = { idLogin: true, ...rawData.data };
+    },
     logout(state) {
       state.token = "";
       state.user = { isLogin: false };
@@ -169,6 +172,12 @@ const store = createStore<GlobalDataProps>({
     login({ commit }, payload) {
       return asyncAndCommit("/api/user/login", "login", commit, {
         method: "post",
+        data: payload,
+      });
+    },
+    updateUser({ commit }, { id, payload }) {
+      return asyncAndCommit(`/api/user/${id}`, "updateUser", commit, {
+        method: "patch",
         data: payload,
       });
     },
