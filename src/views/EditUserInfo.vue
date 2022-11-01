@@ -40,12 +40,14 @@
       </template>
       <template #uploaded="dataProps">
         <div class="uploaded-area">
-          <img :src="dataProps.uploadedData.data.url" />
+          <img
+            :src="((dataProps.uploadedData as ResponseType).data as ImageProps).fitUrl"
+          />
           <h3>点击重新上传</h3>
         </div>
       </template>
     </uploader>
-    <validate-form @form-submit="onFormSubmit">
+    <validate-form @form-submit="onFormSubmit" v-if="activeIndex === 1">
       <label class="form-label">用户名</label>
       <validate-input
         :rules="nameRules"
@@ -64,12 +66,32 @@
         <button class="btn btn-primary btn-large">提交修改</button>
       </template>
     </validate-form>
+    <validate-form @form-submit="onFormSubmit" v-if="activeIndex === 2">
+      <label class="form-label">专栏标题</label>
+      <validate-input
+        :rules="nameRules"
+        v-model="title"
+        placeholder="请输入专栏标题"
+        type="text"
+      />
+      <label class="form-label">专栏信息描述</label>
+      <validate-input
+        :rules="descriptionRules"
+        v-model="columnDescription"
+        placeholder="其输入专栏描述"
+        tag="textarea"
+      />
+      <template #submit>
+        <button class="btn btn-primary btn-large">提交修改</button>
+      </template>
+    </validate-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { watch, onMounted, ref } from "vue";
 import {
+  ColumnProps,
   GlobalDataProps,
   ImageProps,
   ResponseType,
@@ -83,18 +105,23 @@ import validateForm from "../base/ValidateForm.vue";
 import validateInput from "../base/ValidateInput.vue";
 import createMessage from "../base/createMessage";
 import { beforeUploadedCheck } from "../libs/helper";
+import { generateFitUrl } from "../libs/helper";
 
 const store = useStore<GlobalDataProps>();
 const router = useRouter();
-const user = store.state.user;
 const activeIndex = ref(1);
 const nickName = ref("");
 const description = ref("");
-const uploadedData = ref();
+const title = ref("");
+const columnDescription = ref("");
+let uploadedData = ref();
 let imageId = "";
+let userAvatar = {};
+let columnAvatar = {};
 
 const changeTab = (index: number) => {
   activeIndex.value = index;
+  imageId = "";
 };
 
 const uploadCheck = (file: File) => {
@@ -112,12 +139,10 @@ const uploadCheck = (file: File) => {
   return passed;
 };
 
-const nameRules: RuleProps[] = [
-  { type: "required", message: "用户名不能为空" },
-];
+const nameRules: RuleProps[] = [{ type: "required", message: "信息不能为空" }];
 
 const descriptionRules: RuleProps[] = [
-  { type: "required", message: "用户描述信息不能为空" },
+  { type: "required", message: "描述信息不能为空" },
 ];
 
 onMounted(() => {
@@ -125,16 +150,41 @@ onMounted(() => {
     .dispatch("fetchCurrentUser")
     .then((rawData: ResponseType<UserProps>) => {
       const currentUser = rawData.data;
-      console.log(currentUser);
+      // console.log(currentUser);
       const { nickName: name, description: desc, avatar } = currentUser;
-      nickName.value = name;
-      description.value = desc;
+      nickName.value = name as string;
+      description.value = desc as string;
       if (avatar) {
+        generateFitUrl(avatar as ImageProps, 200, 200, ["m_fill"]);
+        userAvatar = { data: avatar };
         uploadedData.value = { data: avatar };
       }
     });
-  if (store.state.user.avatar) {
-    uploadedData.value = { data: store.state.user.avatar };
+  // 加载专栏的信息
+  store
+    .dispatch("fetchColumn", store.state.user.column)
+    .then((rawData: ResponseType<ColumnProps>) => {
+      const currentColumn = rawData.data;
+      //console.log(currentColumn);
+      const {
+        title: columnTitle,
+        description: columnDesc,
+        avatar,
+      } = currentColumn;
+      title.value = columnTitle;
+      columnDescription.value = columnDesc;
+      if (avatar) {
+        generateFitUrl(avatar as ImageProps, 200, 200, ["m_fill"]);
+        columnAvatar = { data: avatar };
+      }
+    });
+});
+
+watch(activeIndex, () => {
+  if (activeIndex.value === 1) {
+    uploadedData.value = userAvatar;
+  } else {
+    uploadedData.value = columnAvatar;
   }
 });
 
@@ -146,16 +196,28 @@ const onFileUploadedSuccess = (rawData: ResponseType<ImageProps>) => {
 
 const onFormSubmit = (result: boolean) => {
   if (result) {
-    const param: UserProps = {
-      _id: store.state.user._id,
-      nickName: nickName.value,
-      description: description.value,
-      isLogin: true,
-    };
-    if (imageId) {
-      param.avatar = { _id: imageId };
+    let param: UserProps | ColumnProps;
+    let action: string;
+    if (activeIndex.value === 1) {
+      action = "updateUser";
+      param = {
+        _id: store.state.user._id,
+        nickName: nickName.value,
+        description: description.value,
+        isLogin: true,
+      };
+    } else {
+      action = "updateColumn";
+      param = {
+        _id: store.state.user.column as string,
+        title: title.value,
+        description: columnDescription.value,
+      };
     }
-    store.dispatch("updateUser", { id: param._id, payload: param }).then(() => {
+    if (imageId) {
+      param.avatar = imageId;
+    }
+    store.dispatch(action, { id: param._id, payload: param }).then(() => {
       createMessage("修改成功, 2秒后跳转到首页", "success", 2000);
       setTimeout(() => {
         router.push("/");
