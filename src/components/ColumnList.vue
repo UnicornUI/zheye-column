@@ -4,7 +4,7 @@
       <div class="card h-100 shadom-sm">
         <div class="card-body text-center">
           <img
-            :src="column.avatar && column.avatar.fitUrl"
+            :src="column.avatar && (column.avatar as ImageProps).fitUrl"
             :alt="column.title"
             class="rounded-circle border border-light my-3"
           />
@@ -24,7 +24,7 @@
 </template>
 <script lang="ts" setup>
 import { PropType, computed } from "vue";
-import { ColumnProps } from "../type/Types";
+import { ColumnProps, ImageProps } from "../type/Types";
 import { addColumnAvatar } from "../libs/helper";
 
 // defineProps 是在 setup 语法块中才能使用的

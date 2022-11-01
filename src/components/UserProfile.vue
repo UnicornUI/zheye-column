@@ -20,7 +20,7 @@
 <script setup lang="ts">
 // code...
 import { PropType, computed } from "vue";
-import { UserProps } from "../type/Types";
+import { UserProps, ImageProps } from "../type/Types";
 import { addColumnAvatar } from "../libs/helper";
 
 const props = defineProps({
@@ -33,7 +33,7 @@ const props = defineProps({
 const fitUrl = computed(() => {
   addColumnAvatar(props.user, 50, 50);
   const { avatar } = props.user;
-  return avatar && avatar.fitUrl;
+  return avatar && (avatar as ImageProps).fitUrl;
 });
 </script>
 
