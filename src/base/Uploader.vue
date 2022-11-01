@@ -112,7 +112,7 @@ const handleFileChange = (e: Event) => {
 };
 </script>
 
-<style scoped>
+<style>
 /* code... */
 .create-post-page .file-upload-container {
   height: 200px;
