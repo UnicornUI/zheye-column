@@ -6,7 +6,7 @@
     >
       <div class="col-3 text-center">
         <img
-          :src="column.avatar && column.avatar.fitUrl"
+          :src="column.avatar && (column.avatar as ImageProps).fitUrl"
           :alt="column.title"
           class="rounded-circle border w-100"
         />
@@ -31,7 +31,7 @@ import { computed, watch, reactive, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { addColumnAvatar } from "../libs/helper";
-import { ColumnProps, GlobalDataProps } from "../type/Types";
+import { ColumnProps, ImageProps, GlobalDataProps } from "../type/Types";
 import useLoadMore from "../hooks/useLoadMore";
 import PostList from "../components/PostList.vue";
 

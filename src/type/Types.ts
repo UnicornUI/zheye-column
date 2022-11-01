@@ -7,7 +7,7 @@ export interface ImageProps {
 export interface ColumnProps {
   _id: string;
   title: string;
-  avatar: ImageProps;
+  avatar?: ImageProps | string;
   description: string;
 }
 
@@ -20,7 +20,7 @@ export interface UserProps {
   column?: string;
   email?: string;
   description?: string;
-  avatar?: ImageProps;
+  avatar?: ImageProps | string;
 }
 
 export interface RuleProps {

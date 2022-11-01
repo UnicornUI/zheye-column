@@ -24,7 +24,7 @@ export function addColumnAvatar(
   height: number
 ) {
   if (data.avatar) {
-    generateFitUrl(data.avatar, width, height);
+    generateFitUrl(data.avatar as ImageProps, width, height);
   } else {
     const parseCol = data as ColumnProps;
     data.avatar = {
