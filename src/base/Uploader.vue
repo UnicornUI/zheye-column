@@ -129,6 +129,7 @@ const handleFileChange = (e: Event) => {
   width: 100%;
   top: 50%;
 }
+
 .circle {
   width: 200px;
   height: 200px;
