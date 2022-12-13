@@ -4,13 +4,7 @@ import { createStore, Commit } from "vuex";
 import { localType, storageHandler } from "../libs/storeage";
 import { axios, AxiosRequestConfig } from "../libs/http";
 import { arrToObj, objToArr } from "../libs/helper";
-import {
-  GlobalDataProps,
-  GlobalErrorProps,
-  UserProps,
-  ColumnProps,
-  PostProps,
-} from "../type/Types";
+import { GlobalDataProps, GlobalErrorProps } from "../type/Types";
 
 const asyncAndCommit = async (
   url: string,
@@ -48,6 +42,9 @@ const store = createStore<GlobalDataProps>({
       };
     },
     fetchColumn(state, rawData) {
+      state.columns.data[rawData.data._id] = rawData.data;
+    },
+    updateColumn(state, rawData) {
       state.columns.data[rawData.data._id] = rawData.data;
     },
     fetchPosts(state, { data: rawData, extraData: columnId }) {
@@ -89,6 +86,9 @@ const store = createStore<GlobalDataProps>({
       // console.log(rawData.data);
       state.user = { isLogin: true, ...rawData.data };
     },
+    updateUser(state, rawData) {
+      state.user = { idLogin: true, ...rawData.data };
+    },
     logout(state) {
       state.token = "";
       state.user = { isLogin: false };
@@ -109,9 +109,18 @@ const store = createStore<GlobalDataProps>({
       }
     },
     fetchColumn({ state, commit }, cid) {
-      if (!state.columns.data[cid]) {
+      const currentColumn = state.columns.data[cid];
+      if (!currentColumn) {
         return asyncAndCommit(`/api/columns/${cid}`, "fetchColumn", commit);
+      } else {
+        return Promise.resolve({ data: currentColumn });
       }
+    },
+    updateColumn({ commit }, { id, payload }) {
+      return asyncAndCommit(`/api/columns/${id}`, "updateColumn", commit, {
+        method: "patch",
+        data: payload,
+      });
     },
     fetchPosts({ state, commit }, params = {}) {
       const { columnId, currentPage = 1, pageSize = 3 } = params;
@@ -169,6 +178,12 @@ const store = createStore<GlobalDataProps>({
     login({ commit }, payload) {
       return asyncAndCommit("/api/user/login", "login", commit, {
         method: "post",
+        data: payload,
+      });
+    },
+    updateUser({ commit }, { id, payload }) {
+      return asyncAndCommit(`/api/user/${id}`, "updateUser", commit, {
+        method: "patch",
         data: payload,
       });
     },

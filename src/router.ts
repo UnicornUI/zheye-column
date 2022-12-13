@@ -50,7 +50,8 @@ const router = createRouter({
     {
       path: "/edit/:id",
       name: "edit",
-      component: EditUserInfo
+      component: EditUserInfo,
+      meta: { requiredLogin: true },
     },
     {
       path: "/*",
@@ -95,7 +96,7 @@ router.beforeEach((to, from, next) => {
             next();
           }
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           console.log(err);
           store.commit("logout");
           next("login");
