@@ -1,13 +1,13 @@
 <template>
   <div class="container-fluid px-0 flex-shrink-0">
-    <global-header :user="currentUser"/>
+    <global-header :user="currentUser" />
     <router-view></router-view>
     <loader v-if="isLoading" text="拼命加载中..." background="rgba(0, 0, 0, 0.8)"></loader>
   </div>
   <footer class="text-center py-4 text-secondary bg-light mt-auto">
     <small>
-        <li class="list-inline-item">© 2020 者也专栏</li>
-        <ul class="list-inline mb-0">
+      <li class="list-inline-item">© 2020 者也专栏</li>
+      <ul class="list-inline mb-0">
         <li class="list-inline-item">课程</li>
         <li class="list-inline-item">文档</li>
         <li class="list-inline-item">联系</li>
@@ -47,7 +47,7 @@ const error = computed(() => {
 watch(() => error.value.status, () => {
   const { status, message } = error.value
   if (status && message) {
-      createMessage(message, "error");
+    createMessage(message, "error");
   }
 });
 

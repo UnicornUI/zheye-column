@@ -1,24 +1,12 @@
 <template>
   <!-- code... -->
   <div class="validate-input-container pb-3">
-    <input
-      v-if="tag !== 'textarea'"
-      class="form-control"
-      :class="{ 'is-invalid': inputRef.error }"
-      v-model="inputRef.val"
-      @blur="validateInput"
-      v-bind="$attrs"
-    />
-    <textarea
-      v-else
-      class="form-control"
-      :class="{'is-invalid': inputRef.error}"
-      @blur="validateInput"
-      v-model="inputRef.val"
-      v-bind="$attrs"
-    />
+    <input v-if="tag !== 'textarea'" class="form-control" :class="{ 'is-invalid': inputRef.error }"
+      v-model="inputRef.val" @blur="validateInput" v-bind="$attrs" />
+    <textarea v-else class="form-control" :class="{ 'is-invalid': inputRef.error }" @blur="validateInput"
+      v-model="inputRef.val" v-bind="$attrs" />
     <span v-if="inputRef.error" class="invalid-feedback">{{
-      inputRef.message
+        inputRef.message
     }}</span>
   </div>
 </template>
@@ -36,7 +24,7 @@ const emailReg =
 const props = defineProps({
   rules: Array as PropType<RuleProps[]>,
   modelValue: String,
-  tag:{
+  tag: {
     type: String as PropType<TagType>,
     default: 'input'
   }

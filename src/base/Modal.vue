@@ -6,13 +6,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">{{ title }}</h5>
-            <button
-              type="button"
-              class="close btn-close"
-              data-dismiss="modal"
-              aria-label="Close"
-              @click="onClose"
-            >
+            <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close" @click="onClose">
               <!--<span aria-hidden="true">&times;</span> -->
             </button>
           </div>
@@ -20,12 +14,7 @@
             <slot></slot>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-              @click="onClose"
-            >
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="onClose">
               取消
             </button>
             <button type="button" class="btn btn-primary" @click="onConfirm">

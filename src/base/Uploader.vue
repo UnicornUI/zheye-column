@@ -1,31 +1,18 @@
 <template>
   <!-- code... -->
   <div class="file-upload">
-    <div
-      class="file-upload-container"
-      @click.prevent="triggerUpload"
-      v-bind="$attrs"
-    >
+    <div class="file-upload-container" @click.prevent="triggerUpload" v-bind="$attrs">
       <slot v-if="fileStatus === 'loading'" name="loading">
         <button class="btn btn-primary" disabled>正在上传...</button>
       </slot>
-      <slot
-        v-else-if="fileStatus === 'success'"
-        name="uploaded"
-        :uploadedData="uploadedData"
-      >
+      <slot v-else-if="fileStatus === 'success'" name="uploaded" :uploadedData="uploadedData">
         <button class="btn btn-primary">上传成功</button>
       </slot>
       <slot v-else name="default">
         <button class="btn btn-primary">点击上传</button>
       </slot>
     </div>
-    <input
-      type="file"
-      class="file-input d-none"
-      ref="fileInput"
-      @change="handleFileChange"
-    />
+    <input type="file" class="file-input d-none" ref="fileInput" @change="handleFileChange" />
   </div>
 </template>
 <script lang="ts">
@@ -125,9 +112,11 @@ const handleFileChange = (e: Event) => {
   height: 100%;
   object-fit: cover;
 }
+
 .uploaded-area {
   position: relative;
 }
+
 .uploaded-area:hover h3 {
   display: block;
 }

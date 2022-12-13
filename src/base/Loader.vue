@@ -1,13 +1,12 @@
 <template>
   <teleport to="#back">
     <div class="d-flex justify-content-center align-item-center h-100 w-100 loading-container"
-    :style="{backgroundColor: background || ''}"
-    >
+      :style="{ backgroundColor: background || '' }">
       <div class="loading-content">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden sr-only">{{text || 'loading ...'}} </span>
+          <span class="visually-hidden sr-only">{{ text || 'loading ...' }} </span>
         </div>
-        <p v-if="text" class="text-primary small">{{text}} </p>
+        <p v-if="text" class="text-primary small">{{ text }} </p>
       </div>
     </div>
   </teleport>
@@ -18,10 +17,10 @@ import useDOMCreate from "../hooks/useDOMCreate";
 
 defineProps({
   text: {
-      type: String,
+    type: String,
   },
   background: {
-      type: String
+    type: String
   }
 });
 
@@ -41,6 +40,7 @@ useDOMCreate('back');
   top: 0;
   bottom: 0;
 }
+
 .loading-content {
   text-align: center;
   margin: auto;

@@ -2,13 +2,9 @@
   <!-- code... -->
   <div class="create-post-page container">
     <h4>{{ isEditMode ? "编辑文章" : "新建文章" }}</h4>
-    <uploader
-      action="api/upload"
+    <uploader action="api/upload"
       class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4"
-      :beforeUpload="uploadCheck"
-      :uploaded="uploadedData"
-      @file-uploaded-success="onFileUploadedSuccess"
-    >
+      :beforeUpload="uploadCheck" :uploaded="uploadedData" @file-uploaded-success="onFileUploadedSuccess">
       <h2>点击上传头像</h2>
       <template #loading>
         <div class="d-flex">
@@ -20,9 +16,7 @@
       </template>
       <template #uploaded="dataProps">
         <div class="uploaded-area">
-          <img
-            :src="((dataProps.uploadedData as ResponseType).data as ImageProps).url"
-          />
+          <img :src="((dataProps.uploadedData as ResponseType).data as ImageProps).url" />
           <h3>点击重新上传</h3>
         </div>
       </template>
@@ -30,23 +24,12 @@
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题: </label>
-        <validate-input
-          :rules="titleRules"
-          v-model="titleVal"
-          placeholder="请输入文章标题"
-          type="text"
-        >
+        <validate-input :rules="titleRules" v-model="titleVal" placeholder="请输入文章标题" type="text">
         </validate-input>
       </div>
       <div class="mb-3">
         <label class="form-label">文章详情: </label>
-        <validate-input
-          row="10"
-          tag="textarea"
-          placeholder="请输入文章详情"
-          :rules="contentRules"
-          v-model="contentVal"
-        >
+        <validate-input row="10" tag="textarea" placeholder="请输入文章详情" :rules="contentRules" v-model="contentVal">
         </validate-input>
       </div>
       <template #submit>
@@ -149,9 +132,9 @@ const onFormSubmit = (result: boolean) => {
       const actionName = isEditMode ? "updatePost" : "createPost";
       const sendData = isEditMode
         ? {
-            id: queryId,
-            payload: newPost,
-          }
+          id: queryId,
+          payload: newPost,
+        }
         : newPost;
       store.dispatch(actionName, sendData).then(() => {
         createMessage("发表成功, 2秒后跳转到文章", "success", 2000);

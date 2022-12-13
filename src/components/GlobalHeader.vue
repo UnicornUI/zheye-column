@@ -36,7 +36,7 @@
 import { PropType } from "vue";
 import { UserProps, GlobalDataProps } from "../type/Types";
 import { useStore } from "vuex";
-import { useRouter }  from "vue-router";
+import { useRouter } from "vue-router";
 import Dropdown from "../base/Dropdown.vue";
 import DropdownItem from "../base/DropdownItem.vue";
 
@@ -54,11 +54,10 @@ const router = useRouter();
 const handleLogout = () => {
   console.log("handleLogout");
   store.commit("logout");
-  router.push({name: "home"});
+  router.push({ name: "home" });
 }
 
 </script>
 <style scoped>
 /* code... */
-
 </style>
