@@ -31,7 +31,7 @@
     </uploader>
     <validate-form @form-submit="onFormSubmit" v-if="activeIndex === 1">
       <label class="form-label">用户名</label>
-      <validate-input :rules="nameRules" v-model="nickName" placeholder="请输入用户名" type="text" />
+      <validate-input :rules="nameRules" v-model="nickname" placeholder="请输入用户名" type="text" />
       <label class="form-label">用户信息描述</label>
       <validate-input :rules="descriptionRules" v-model="description" placeholder="请输出用户描述" tag="textarea" />
       <template #submit>
@@ -72,7 +72,7 @@ import { generateFitUrl } from "../libs/helper";
 const store = useStore<GlobalDataProps>();
 const router = useRouter();
 const activeIndex = ref(1);
-const nickName = ref("");
+const nickname = ref("");
 const description = ref("");
 const title = ref("");
 const columnDescription = ref("");
@@ -109,8 +109,8 @@ onMounted(() => {
   store.dispatch("fetchCurrentUser").then((rawData: ResponseType<UserProps>) => {
     const currentUser = rawData.data;
     // console.log(currentUser);
-    const { nickName: name, description: desc, avatar } = currentUser;
-    nickName.value = name as string;
+    const { nickname: name, description: desc, avatar } = currentUser;
+    nickname.value = name as string;
     description.value = desc as string;
     if (avatar) {
       generateFitUrl(avatar as ImageProps, 200, 200, ["m_fill"]);
@@ -156,7 +156,7 @@ const onFormSubmit = (result: boolean) => {
       action = "updateUser";
       param = {
         _id: store.state.user._id,
-        nickName: nickName.value,
+        nickname: nickname.value,
         description: description.value,
         isLogin: true,
       };

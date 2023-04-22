@@ -44,7 +44,5 @@ const hide = () => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 

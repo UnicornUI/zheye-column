@@ -191,7 +191,7 @@ const store = createStore<GlobalDataProps>({
       return asyncAndCommit("/api/user/current", "fetchCurrentUser", commit);
     },
     register({ commit }, payload) {
-      return asyncAndCommit("/api/users/", "register", commit, {
+      return asyncAndCommit("/api/user/create", "register", commit, {
         method: "post",
         data: payload,
       });
