@@ -102,7 +102,7 @@ const store = createStore<GlobalDataProps>({
       if (state.columns.currentPage < currentPage) {
         console.log(state.columns.currentPage, currentPage);
         return asyncAndCommit(
-          `/api/columns?currentPage=${currentPage}&pageSize=${pageSize}`,
+          `/api/columns/public?currentPage=${currentPage}&pageSize=${pageSize}`,
           "fetchColumns",
           commit
         );
