@@ -3,8 +3,16 @@ import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
+  build: {
+    outDir: "column",
+    assetsDir: "static"
+  },
   plugins: [vue()],
   server: {
+    open: true,
+    port: 3003,
+    host: "127.0.0.1",
     proxy: {
       "/api": {
         //target: "http://api.vikingship.xyz/",
@@ -13,8 +21,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
-    open: true,
-    port: 3003,
-    host: "127.0.0.1",
   },
 });
